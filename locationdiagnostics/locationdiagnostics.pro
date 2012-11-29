@@ -1,12 +1,12 @@
 TEMPLATE = app
 TARGET = locationdiagnostics
 
-CONFIG += qt warn_on debug_and_release cascades
+CONFIG += qt warn_on debug_and_release cascades console
 
 INCLUDEPATH += ../src
 SOURCES += ../src/*.cpp
 HEADERS += ../src/*.hpp ../src/*.h
-LIBS += -lQtLocationSubset -lbbmultimedia -lmmrndclient -lasound -lbbcascadesmaps
+LIBS += -lQtLocationSubset -lbbmultimedia  -lbbcascadesmaps -lGLESv1_CM
 
 lupdate_inclusion {
     SOURCES += ../assets/*.qml
@@ -15,6 +15,8 @@ lupdate_inclusion {
 device {
     CONFIG(release, debug|release) {
         DESTDIR = o.le-v7
+        TEMPLATE = lib
+        QMAKE_CXXFLAGS_RELEASE += -fvisibility=hidden -mthumb
     }
     CONFIG(debug, debug|release) {
         DESTDIR = o.le-v7-g

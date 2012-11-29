@@ -1,0 +1,14 @@
+*~
+.metadata
+*.qm
+*.ts
+
+# build directories
+arm/
+x86/
+o/
+o-g/
+o.le-v7/
+o.le-v7-g/
+
+

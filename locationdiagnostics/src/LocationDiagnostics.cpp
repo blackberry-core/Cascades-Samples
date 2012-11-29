@@ -88,6 +88,7 @@ LocationSession* LocationDiagnostics::createLocationSession(bool trackingMode)
     session->positionSource()->setUpdateInterval(m_frequency * 1000);
     session->positionSource()->setProperty("canRunInBackground", m_backgroundMode);
 
+
     // Activate the session
     if (trackingMode) {
         session->startUpdates();
@@ -101,7 +102,7 @@ LocationSession* LocationDiagnostics::createLocationSession(bool trackingMode)
 
 void LocationDiagnostics::onManualExit()
 {
-	qApp->exit(0);
+    qApp->exit(0);
 }
 
 //! [2]
@@ -251,3 +252,4 @@ void LocationDiagnostics::setBackgroundMode(bool mode)
 
     emit backgroundModeChanged();
 }
+

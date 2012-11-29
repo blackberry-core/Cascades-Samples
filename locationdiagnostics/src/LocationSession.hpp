@@ -16,12 +16,15 @@
 #ifndef LOCATIONSESSION_HPP
 #define LOCATIONSESSION_HPP
 
+#include <QDebug>
 #include <QtLocationSubset/QGeoPositionInfo>
 #include <QtLocationSubset/QGeoPositionInfoSource>
 #include <QtLocationSubset/QGeoSatelliteInfo>
 #include <QtLocationSubset/QGeoSatelliteInfoSource>
+#include <bb/cascades/maps/MapView>
 
 #include <QtCore/QObject>
+#include <QtCore/QPointer>
 
 using namespace QtMobilitySubset;
 
@@ -35,9 +38,9 @@ class LocationSession: public QObject
 
     // The properties that provide the location information to the UI
     Q_PROPERTY(QString method READ method NOTIFY dataChanged)
-    Q_PROPERTY(QString latitude READ latitude NOTIFY dataChanged)
-    Q_PROPERTY(QString longitude READ longitude NOTIFY dataChanged)
-    Q_PROPERTY(QString altitude READ altitude NOTIFY dataChanged)
+    Q_PROPERTY(double latitude READ latitude NOTIFY dataChanged)
+    Q_PROPERTY(double longitude READ longitude NOTIFY dataChanged)
+    Q_PROPERTY(double altitude READ altitude NOTIFY dataChanged)
     Q_PROPERTY(QString time READ time NOTIFY dataChanged)
     Q_PROPERTY(QString direction READ direction NOTIFY dataChanged)
     Q_PROPERTY(QString groundSpeed READ groundSpeed NOTIFY dataChanged)
@@ -57,6 +60,8 @@ class LocationSession: public QObject
     Q_PROPERTY(QString satellitesInView READ satellitesInView NOTIFY dataChanged)
 
     Q_PROPERTY(QString log READ log NOTIFY logChanged)
+
+    Q_PROPERTY(bb::cascades::maps::MapView* mapView READ mapView WRITE setMapView NOTIFY mapViewChanged)
 
 public:
     LocationSession(QObject* parent, bool satInfo);
@@ -83,6 +88,7 @@ Q_SIGNALS:
     // The change notification signals of the properties
     void dataChanged();
     void logChanged();
+    void mapViewChanged();
 
 private Q_SLOTS:
     // This slot is invoked whenever new location information are retrieved
@@ -97,6 +103,9 @@ private Q_SLOTS:
     // This slot is invoked whenever new information about the in-view satellites are retrieved
     void satellitesInViewUpdated(const QList<QGeoSatelliteInfo> & satellites);
 
+    // This slot is invoked whenever a new pin is created by long pressing on the mapView.
+    void onPinCreated(const QString& pinID);
+
 private:
     // A helper method to parse the raw geo information
     void parseRawData();
@@ -106,9 +115,9 @@ private:
 
     // The accessor methods of the properties
     QString method() const;
-    QString latitude() const;
-    QString longitude() const;
-    QString altitude() const;
+    double latitude() const;
+    double longitude() const;
+    double altitude() const;
     QString time() const;
     QString direction() const;
     QString groundSpeed() const;
@@ -126,6 +135,8 @@ private:
     QString satellitesInUse() const;
     QString satellitesInView() const;
     QString log() const;
+    bb::cascades::maps::MapView* mapView() const;
+    void setMapView(bb::cascades::maps::MapView *mapView);
 
     // The flag for sound usage
     bool m_soundEnabled;
@@ -138,9 +149,9 @@ private:
 
     // The property values
     QString m_method;
-    QString m_latitude;
-    QString m_longitude;
-    QString m_altitude;
+    double m_latitude;
+    double m_longitude;
+    double m_altitude;
     QString m_time;
     QString m_direction;
     QString m_groundSpeed;
@@ -158,6 +169,8 @@ private:
     QString m_satellitesInUse;
     QString m_satellitesInView;
     QString m_log;
+
+    QPointer<bb::cascades::maps::MapView> m_mapView;
 };
 //! [0]
 
